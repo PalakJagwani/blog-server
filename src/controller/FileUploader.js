@@ -2,7 +2,7 @@ import {ApiResponse} from '../utils/ApiResponse.js'
 import mongoose from 'mongoose'
 import grid from 'gridfs-stream'
 
-const url = 'http://localhost:8000'
+const url = 'https://blog-server-beta-seven.vercel.app'
 
 let gfs, gridfsBucket;
 const conn = mongoose.connection;
