@@ -15,9 +15,15 @@ export const signUpUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         const user = {email : req.body.email,  password : hashedPassword}
         const newUser = await new User(user)
+
+        const accessToken = jwt.sign(newUser.toJSON(), process.env.ACCESS_SECRET_KEY, {expiresIn : '30m'});
+        const refreshToken = jwt.sign(newUser.toJSON(), process.env.REFRESH_SECRET_KEY);
+        const newToken = new Token({token : refreshToken})
+        await newToken.save();
+
         await newUser.save();
         return res.status(200).json(
-            new ApiResponse(200, {currentuser : user.email}, "User signed up successfully")
+            new ApiResponse(200, {currentuser : user.email, accessToken : accessToken, refreshToken : refreshToken }, "User signed up successfully")
         )
     } catch (error) {
         return res.status(500).json(
