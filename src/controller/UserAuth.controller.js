@@ -35,7 +35,7 @@ export const signUpUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     let user = await User.findOne( {email : req.body.email} )
     if(!user){
-        return res.status(400).json(new ApiResponse(500, {}, "Wrong username"))
+        return res.status(400).json(new ApiResponse(500, {}, "User doesn't exists"))
     }
     try {
         let match = await bcrypt.compare(req.body.password, user.password)
